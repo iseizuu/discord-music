@@ -1,0 +1,22 @@
+{
+  "name": "discord-music-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.3",
+    "discord.js": "^12.4.1",
+    "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.2.7",
+    "fs": "^0.0.1-security",
+    "scrape-youtube": "^1.0.6",
+    "ytdl-core": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "7.12.1",
+    "eslint-config-standard": "^16.0.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1"
+  }
+}
