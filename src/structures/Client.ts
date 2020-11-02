@@ -4,14 +4,18 @@ import type Listener from "./Listener";
 import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
+import nodeSuperfetch from "node-superfetch";
 
 import config from "../config.json";
 
 import "../extenders";
+import YouTubeSearch from "../utils/YoutubeSearch";
 
 export default class MusicClient extends Client {
-    public commands: Collection<string, Command> = new Collection();
-    public config: typeof config = config;
+    public readonly httpClient = nodeSuperfetch;
+    public readonly commands: Collection<string, Command> = new Collection();
+    public readonly config: typeof config = config;
+    public readonly youtube = new YouTubeSearch(this);
     public constructor(options?: ClientOptions) {
         super({
             disableMentions: "everyone",
@@ -52,6 +56,7 @@ export default class MusicClient extends Client {
 
 declare module "discord.js" {
     export interface Client {
+        httpClient: typeof nodeSuperfetch;
         commands: Collection<string, Command>;
         config: typeof config;
         loadCommands(): Promise<void>;
