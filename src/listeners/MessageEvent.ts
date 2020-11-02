@@ -4,7 +4,7 @@ import Listener from "../structures/Listener";
 export default class MessageEvent extends Listener {
     public name = "message";
     private readonly prefix = this.client.config.prefix;
-    public async exec(msg: Message): Promise<void> {
+    public async exec(msg: Message): Promise<Message | void> {
         if (!msg.guild) return;
         if (msg.author.bot) return;
         if (!msg.content.startsWith(this.prefix)) return;
@@ -15,6 +15,20 @@ export default class MessageEvent extends Listener {
         if (command) {
             if (command.config.ownerOnly && !msg.author.isDev) return;
             try {
+                if (!msg.author.isDev) {
+                    const now = Date.now();
+                    const userCooldown = this.client.cooldowns.get(`${command.config.name}-${msg.author.id}`);
+                    const cooldownAmount = command.config.cooldown! * 1000;
+                    if (userCooldown) {
+                        const expirationTime = userCooldown + cooldownAmount;
+                        if (now < expirationTime) {
+                            const timeLeft = (expirationTime - now) / 1000;
+                            await msg.channel.send(`Hold on, just wait ${timeLeft.toFixed(1)} To used \`${command.config.name}\` again.`);
+                        }
+                    }
+                    this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
+                    setTimeout(() => this.client.cooldowns.delete(`${command.config.name}-${msg.author.id}`), cooldownAmount);
+                }
                 await command.exec(msg, args);
             } catch (e) {
                 console.error(e);
