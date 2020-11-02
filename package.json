@@ -8,6 +8,7 @@
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
+    "node-superfetch": "^0.1.10",
     "scrape-youtube": "^1.0.6",
     "ytdl-core": "^4.0.0"
   },
