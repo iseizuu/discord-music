@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/prefer-regexp-exec */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -5,7 +6,7 @@ import type { Client, Message } from "discord.js";
 import Command from "../../structures/Command";
 import { inspect } from "util";
 
-export default class PingCommand extends Command {
+export default class EvalCommand extends Command {
     public constructor(client: Client) {
         super(client, { name: "eval" });
     }
@@ -16,6 +17,8 @@ export default class PingCommand extends Command {
         const isSilent = _args.includes("--silent");
         const code = _args.filter((e: string) => !e.match(/^--(async|silent)$/)).join(" ");
         const startTime = msg.createdTimestamp;
+        const client = this.client;
+        const message = msg;
         try {
             // eslint-disable-next-line no-eval
             let result = eval(isAsync ? `(async()=>{${code}})()` : code);
