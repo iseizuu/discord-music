@@ -4,5 +4,6 @@ export default class VideoInfo {
         public readonly title: string,
         public readonly author: string,
         public readonly duration: number|null,
-        public readonly url: string) {}
+        public readonly url: string
+    ) {}
 }

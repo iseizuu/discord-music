@@ -1,33 +1,13 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { Structures } from "discord.js";
-import type MusicClient from "../structures/Client";
+import MusicHandler from "../structures/MusicHandler";
 
-interface music { 
-    queue: never[]; 
-    playing: boolean; 
-    loop: boolean; 
-    current: undefined; 
-    songDispatcher: null; 
-    volume: number; 
-}
 class MusicGuild extends Structures.get("Guild") {
-    constructor(client: MusicClient, data: any) {
-        super(client, data);
-        this.music = {
-            queue: [],
-            playing: false,
-            loop: false,
-            current: undefined,
-            songDispatcher: null,
-            volume: 1
-        };
-    }
+    public readonly music: MusicHandler = new MusicHandler(this);
 }
 
 declare module "discord.js" {
     export interface Guild {
-        music: music;
-
+        music: MusicHandler;
     }
 }
 

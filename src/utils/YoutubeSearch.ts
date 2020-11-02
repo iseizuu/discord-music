@@ -10,7 +10,6 @@ export default class YouTubeSearch {
         const { text } = await this.client.httpClient
             .get("https://www.youtube.com/results")
             .query("search_query", query);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.extractVideo(text);
     }
 
@@ -31,7 +30,7 @@ export default class YouTubeSearch {
             .map((x: any) => this.extractData(x.videoRenderer)) as VideoInfo[];
     }
 
-    private extractData(video: any): VideoInfo|undefined {
+    private extractData(video: any): VideoInfo {
         const title = video.title.runs[0].text;
         const author = video.ownerText.runs[0].text;
         const duration = video.lengthText ? Util.durationToMillis(video.lengthText.simpleText) : null;

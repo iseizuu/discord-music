@@ -14,7 +14,7 @@ export default class MusicClient extends Client {
     public readonly httpClient = nodeSuperfetch;
     public readonly commands: Collection<string, Command> = new Collection();
     public readonly config: typeof config = config;
-    public readonly youtube = new YouTubeSearch(this);
+    public readonly youtube: YouTubeSearch = new YouTubeSearch(this);
     public readonly cooldowns: Collection<string, number>;
     public constructor(options?: ClientOptions) {
         super({
@@ -60,6 +60,7 @@ declare module "discord.js" {
         httpClient: typeof nodeSuperfetch;
         commands: Collection<string, Command>;
         config: typeof config;
+        youtube: YouTubeSearch;
         cooldowns: Collection<string, number>;
         loadCommands(): Promise<void>;
         loadEventListeners(): Promise<void>;
