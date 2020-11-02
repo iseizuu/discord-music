@@ -23,7 +23,8 @@ export default class MessageEvent extends Listener {
                         const expirationTime = userCooldown + cooldownAmount;
                         if (now < expirationTime) {
                             const timeLeft = (expirationTime - now) / 1000;
-                            await msg.channel.send(`Hold on, just wait ${timeLeft.toFixed(1)} To used \`${command.config.name}\` again.`);
+                            await msg.channel.send(`Hold on, you just need to wait for ${timeLeft.toFixed(1)} secs to use \`${command.config.name}\` again.`);
+                            return;
                         }
                     }
                     this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
