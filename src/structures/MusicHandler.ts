@@ -1,6 +1,6 @@
 import type { Client, Guild, StreamDispatcher } from "discord.js";
 import type Song from "./Song";
-import VideoInfo from "./VideoInfo";
+import type VideoInfo from "./VideoInfo";
 
 export default class MusicHandler {
     public readonly client: Client;
