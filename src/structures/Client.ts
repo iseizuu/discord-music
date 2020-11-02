@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { ClientOptions } from "discord.js";
 import type Command from "./Command";
 import type Listener from "./Listener";

@@ -14,21 +14,21 @@ export default class MessageEvent extends Listener {
         const command = this.client.commands.get(commandName.toLowerCase()) || this.client.commands.find(c => c.config.aliases!.includes(commandName.toLowerCase()));
         if (command) {
             if (command.config.ownerOnly && !msg.author.isDev) return;
-            try {
-                if (!msg.author.isDev) {
-                    const now = Date.now();
-                    const userCooldown = this.client.cooldowns.get(`${command.config.name}-${msg.author.id}`);
-                    const cooldownAmount = command.config.cooldown! * 1000;
-                    if (userCooldown) {
-                        const expirationTime = userCooldown + cooldownAmount;
-                        if (now < expirationTime) {
-                            const timeLeft = (expirationTime - now) / 1000;
-                            await msg.channel.send(`Hold on, you just need to wait for ${timeLeft.toFixed(1)} secs to use \`${command.config.name}\` again.`);
-                        }
+            if (!msg.author.isDev) {
+                const now = Date.now();
+                const userCooldown = this.client.cooldowns.get(`${command.config.name}-${msg.author.id}`);
+                const cooldownAmount = command.config.cooldown! * 1000;
+                if (userCooldown) {
+                    const expirationTime = userCooldown + cooldownAmount;
+                    if (now < expirationTime) {
+                        const timeLeft = (expirationTime - now) / 1000;
+                        await msg.channel.send(`Hold on, you just need to wait for ${timeLeft.toFixed(1)} secs to use \`${command.config.name}\` again.`);
                     }
-                    this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
-                    setTimeout(() => this.client.cooldowns.delete(`${command.config.name}-${msg.author.id}`), cooldownAmount);
                 }
+                this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
+                setTimeout(() => this.client.cooldowns.delete(`${command.config.name}-${msg.author.id}`), cooldownAmount);
+            }
+            try {
                 await command.exec(msg, args);
             } catch (e) {
                 console.error(e);
