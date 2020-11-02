@@ -8,7 +8,8 @@ export function CommandConf(config: CommandConfig) {
             ...config,
             aliases: config.aliases?.length ? config.aliases : [],
             description: config.description || "Unspecified description.",
-            cooldown: config.cooldown || 3
+            cooldown: config.cooldown || 3,
+            ownerOnly: Boolean(config.ownerOnly)
         };
         return new Proxy(target, {
             construct: (ctx, [client]): T => new ctx(client, config)

@@ -3,5 +3,6 @@ export interface CommandConfig {
     aliases?: string[];
     description?: string;
     cooldown?: number;
+    ownerOnly?: boolean;
     category?: string;
 }
