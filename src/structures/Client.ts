@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { ClientOptions } from "discord.js";
 import type Command from "./Command";
 import type Listener from "./Listener";
@@ -12,11 +13,13 @@ import "../extenders";
 export default class MusicClient extends Client {
     public commands: Collection<string, Command> = new Collection();
     public config: typeof config = config;
+    public cooldowns: Collection<string, any>;
     public constructor(options?: ClientOptions) {
         super({
             disableMentions: "everyone",
             ...options
         });
+        this.cooldowns = new Collection();
     }
 
     public build(): void {
@@ -54,6 +57,7 @@ declare module "discord.js" {
     export interface Client {
         commands: Collection<string, Command>;
         config: typeof config;
+        cooldowns: Collection<string, any>;
         loadCommands(): Promise<void>;
         loadEventListeners(): Promise<void>;
     }
