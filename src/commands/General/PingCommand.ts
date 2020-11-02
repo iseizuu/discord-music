@@ -6,7 +6,7 @@ export default class PingCommand extends Command {
         super(client, { name: "ping" });
     }
 
-    public async exec(msg: Message, _args: string[]): Promise<void> {
+    public async exec(msg: Message): Promise<void> {
         await msg.channel.send(`🏓 Pong! \`${this.client.ws.ping}ms\``);
     }
 }

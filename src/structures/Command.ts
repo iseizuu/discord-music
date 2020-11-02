@@ -12,5 +12,5 @@ export default abstract class Command {
         };
     }
 
-    public abstract exec(msg: Message, args: string[]): any;
+    public abstract exec(msg: Message, args?: string[]): any;
 }
