@@ -5,8 +5,9 @@ import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
 
-import "../extenders/Guild";
 import config from "../config.json";
+
+import "../extenders";
 
 export default class MusicClient extends Client {
     public commands: Collection<string, Command> = new Collection();
