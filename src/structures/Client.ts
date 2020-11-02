@@ -6,11 +6,10 @@ import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
 import nodeSuperfetch from "node-superfetch";
-
+import YouTubeSearch from "../utils/YoutubeSearch";
 import config from "../config.json";
 
 import "../extenders";
-import YouTubeSearch from "../utils/YoutubeSearch";
 
 export default class MusicClient extends Client {
     public readonly httpClient = nodeSuperfetch;
