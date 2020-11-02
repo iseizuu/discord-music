@@ -4,7 +4,7 @@ import Listener from "../structures/Listener";
 export default class MessageEvent extends Listener {
     public name = "message";
     private readonly prefix = this.client.config.prefix;
-    public async exec(msg: Message): Promise<Message | void> {
+    public async exec(msg: Message): Promise<void> {
         if (!msg.guild) return;
         if (msg.author.bot) return;
         if (!msg.content.startsWith(this.prefix)) return;
@@ -24,7 +24,6 @@ export default class MessageEvent extends Listener {
                         if (now < expirationTime) {
                             const timeLeft = (expirationTime - now) / 1000;
                             await msg.channel.send(`Hold on, you just need to wait for ${timeLeft.toFixed(1)} secs to use \`${command.config.name}\` again.`);
-                            return;
                         }
                     }
                     this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
