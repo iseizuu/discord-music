@@ -8,6 +8,7 @@ const depthFlagRegex = /^--depth=?(.*)$/;
 @CommandConf({
     name: "eval",
     aliases: ["e"],
+    usage: "eval codes",
     ownerOnly: true
 })
 export default class EvalCommand extends Command {

@@ -16,7 +16,7 @@ export default class MusicHandler {
         this.client = guild.client;
     }
 
-    public fetch(query: string): Promise<VideoInfo[]> {
+    public search(query: string): Promise<VideoInfo[]> {
         return this.client.youtube.load(query);
     }
 }

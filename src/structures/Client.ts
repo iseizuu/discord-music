@@ -1,6 +1,7 @@
 import type { ClientOptions } from "discord.js";
 import type Command from "./Command";
 import type Listener from "./Listener";
+import type utilities from "../utils/Util";
 import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
@@ -16,12 +17,14 @@ export default class MusicClient extends Client {
     public readonly config: typeof config = config;
     public readonly youtube: YouTubeSearch = new YouTubeSearch(this);
     public readonly cooldowns: Collection<string, number>;
+    public util: utilities;
     public constructor(options?: ClientOptions) {
         super({
             disableMentions: "everyone",
             ...options
         });
         this.cooldowns = new Collection();
+        this.util = require("../utils/Util");
     }
 
     public build(): void {

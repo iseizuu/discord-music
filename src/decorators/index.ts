@@ -8,6 +8,7 @@ export function CommandConf(config: CommandConfig) {
             ...config,
             aliases: config.aliases?.length ? config.aliases : [],
             description: config.description || "Unspecified description.",
+            usage: config.usage || "Usage not specified",
             cooldown: config.cooldown || 3,
             ownerOnly: Boolean(config.ownerOnly)
         };
