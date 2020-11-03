@@ -5,7 +5,7 @@ import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
 import nodeSuperfetch from "node-superfetch";
-import YouTubeSearch from "../utils/YoutubeSearch";
+import YouTubeSearch from "../utils/YouTubeSearch";
 import config from "../config.json";
 
 import "../extenders";
