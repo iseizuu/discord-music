@@ -1,11 +1,11 @@
 import type { ClientOptions } from "discord.js";
 import type Command from "./Command";
 import type Listener from "./Listener";
-import type utilities from "../utils/Util";
 import { Collection, Client } from "discord.js";
 import { readdir } from "fs/promises";
 import { join } from "path";
 import nodeSuperfetch from "node-superfetch";
+import Utility from "../utils/Utility";
 import YouTubeSearch from "../utils/YouTubeSearch";
 import config from "../config.json";
 
@@ -16,15 +16,13 @@ export default class MusicClient extends Client {
     public readonly commands: Collection<string, Command> = new Collection();
     public readonly config: typeof config = config;
     public readonly youtube: YouTubeSearch = new YouTubeSearch(this);
-    public readonly cooldowns: Collection<string, number>;
-    public util: utilities;
+    public readonly cooldowns: Collection<string, number> = new Collection();
+    public readonly util: Utility = new Utility(this);
     public constructor(options?: ClientOptions) {
         super({
             disableMentions: "everyone",
             ...options
         });
-        this.cooldowns = new Collection();
-        this.util = require("../utils/Util");
     }
 
     public build(): void {
@@ -65,6 +63,7 @@ declare module "discord.js" {
         config: typeof config;
         youtube: YouTubeSearch;
         cooldowns: Collection<string, number>;
+        util: Utility;
         loadCommands(): Promise<void>;
         loadEventListeners(): Promise<void>;
     }

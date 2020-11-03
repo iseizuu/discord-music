@@ -1,6 +1,5 @@
 import type { Client } from "discord.js";
 import VideoInfo from "../structures/VideoInfo";
-import Util from "./Util";
 
 export default class YouTubeSearch {
     private readonly initialDataRegex = /(window\["ytInitialData"]|var ytInitialData)\s*=\s*(.*);/;
@@ -32,7 +31,7 @@ export default class YouTubeSearch {
     private extractData(video: any): VideoInfo {
         const title = video.title.runs[0].text;
         const author = video.ownerText.runs[0].text;
-        const duration = video.lengthText ? Util.durationToMillis(video.lengthText.simpleText) : null;
+        const duration = video.lengthText ? this.client.util.durationToMillis(video.lengthText.simpleText) : null;
         return new VideoInfo(video.videoId, title, author, duration);
     }
 }
