@@ -33,6 +33,6 @@ export default class YouTubeSearch {
         const title = video.title.runs[0].text;
         const author = video.ownerText.runs[0].text;
         const duration = video.lengthText ? Util.durationToMillis(video.lengthText.simpleText) : null;
-        return new VideoInfo(video.videoId, title, author, duration, `https://www.youtube.com/watch?v=${video?.videoId}`);
+        return new VideoInfo(video.videoId, title, author, duration);
     }
 }
