@@ -1,9 +1,6 @@
-import type { Message } from "discord.js";
-import type { VoiceChannel } from "discord.js";
-import ytdl from "ytdl-core";
+import type { Message, TextChannel } from "discord.js";
 import Command from "../../structures/Command";
 import { CommandConf } from "../../decorators";
-import type VideoInfo from "../../structures/VideoInfo";
 
 @CommandConf({
     name: "play",
@@ -23,44 +20,8 @@ export default class PlayCommand extends Command {
         const songs = await msg.guild?.music.search(query);
         if (!songs?.length) return msg.channel.send("Sorry, no results found");
 
-        await this.play(songs[0], msg, voiceChannel);
+        msg.guild?.music.add(songs[0], msg.author);
+        if (!msg.guild?.music.channel.voice) await msg.guild?.music.join(msg.member!.voice.channel!, msg.channel as TextChannel);
+        if (!msg.guild?.music.dispatcher) msg.guild?.music.start();
     }
-
-    private async play(video: VideoInfo, msg: Message,  voiceChannel: VoiceChannel): Promise<void> {
-        const guildMusic = msg.guild?.music;
-        const structure = {
-            info: {
-                id: video.id,
-                title: video.title,
-                author: video.author,
-                duration: video.duration,
-                url: video.url,
-                thumbnail:`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`
-            },
-            requester: msg.author
-        };
-
-        guildMusic?.queue.push(structure);
-
-        const connect = await voiceChannel.join();
-        connect.play(ytdl(video.url, {
-            filter: "audioonly",
-            quality: "highestaudio",
-            highWaterMark: 1024 * 1024 * 1024
-        }))
-            .on("start", () => {
-            // guildMusic?.dispatcher;
-                guildMusic!.playing = true;
-                guildMusic!.currSong = structure;
-                guildMusic?.queue.shift();
-                void msg.channel.send(`Playing: ${guildMusic!.currSong.info.title}`);
-            })
-            .on("finish", () => {
-                guildMusic!.playing = false;
-                guildMusic!.currSong = null;
-                voiceChannel.leave();
-                void msg.channel.send("Dah selesai");
-            });
-    }
-    
 }
