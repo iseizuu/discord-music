@@ -14,7 +14,6 @@ export default class YouTubeSearch {
     }
 
     private extractVideo(html: string): VideoInfo[] {
-        // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
         const matched = this.initialDataRegex.exec(html)![2];
         const result = JSON.parse(matched);
         const videos = result
