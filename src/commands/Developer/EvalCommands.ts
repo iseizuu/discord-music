@@ -3,6 +3,8 @@ import Command from "../../structures/Command";
 import { inspect } from "util";
 import { CommandConf } from "../../decorators";
 
+const depthFlagRegex = /^--depth=?(.*)$/;
+
 @CommandConf({
     name: "eval",
     aliases: ["e"],
@@ -12,7 +14,9 @@ export default class EvalCommand extends Command {
     public async exec(msg: Message, args: string[]): Promise<void> {
         const isAsync = args.includes("--async");
         const isSilent = args.includes("--silent");
-        const code = args.filter((e: string) => !(/^--(async|silent)$/).test(e)).join(" ");
+        const isCustomDepth = args.some(e => depthFlagRegex.test(e));
+        const depth = isCustomDepth ? parseInt(depthFlagRegex.exec(args.find(e => depthFlagRegex.exec(e))!)![1], 10) || 0 : 0;
+        const code = args.filter(e => !/^--(async|silent|depth=?(.*))$/.test(e)).join(" ");
         const startTime = msg.createdTimestamp;
 
         const client = this.client; // eslint-disable-line
@@ -27,7 +31,7 @@ export default class EvalCommand extends Command {
                 isResultPromise = true;
             }
             if (isSilent) return;
-            let inspectedResult = typeof result === "string" ? result : inspect(result, { depth: 0 });
+            let inspectedResult = typeof result === "string" ? result : inspect(result, { depth });
             if (isResultPromise) {
                 inspectedResult = `Promise<${typeof result === "string" ? inspect(inspectedResult) : inspectedResult}>`;
             }
