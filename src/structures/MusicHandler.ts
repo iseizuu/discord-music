@@ -24,7 +24,6 @@ export default class MusicHandler {
     }
 
     public start(): void {
-        if (!this.channel.voice) return;
         this.guild.voice?.connection?.play(ytdl(this.queue[0].info.url, {
             filter: "audioonly",
             quality: "highestaudio"
@@ -37,6 +36,15 @@ export default class MusicHandler {
         await voice.join();
         this.channel = { voice, text };
         return true;
+    }
+
+    public setVolume(newVol: number): void {
+        this.volume = newVol;
+        this.dispatcher?.setVolume(newVol / 100);
+    }
+
+    public togglePause(): void {
+        this.dispatcher?.paused ? this.dispatcher.resume() : this.dispatcher?.pause();
     }
 
     public reset(): void {
@@ -52,8 +60,8 @@ export default class MusicHandler {
         return this.client.youtube.load(query);
     }
 
-    public get dispatcher(): StreamDispatcher|undefined {
-        return this.guild.me?.voice.connection?.dispatcher;
+    public get dispatcher(): StreamDispatcher|null {
+        return this.guild.me?.voice.connection?.dispatcher || null;
     }
 
     private listen(): void {
