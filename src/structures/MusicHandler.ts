@@ -47,6 +47,16 @@ export default class MusicHandler {
         this.dispatcher?.paused ? this.dispatcher.resume() : this.dispatcher?.pause();
     }
 
+    public skip(): void {
+        this.dispatcher?.end();
+    }
+
+    public stop(): void {
+        this.queue = [];
+        this.loop = false;
+        this.skip();
+    }
+
     public reset(): void {
         this.channel = {};
         this.loop = false;
