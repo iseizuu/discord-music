@@ -16,12 +16,26 @@ export default class PlayCommand extends Command {
 
         if (!voiceChannel) return msg.channel.send("You need to join voice channel first");
         if (!query) return msg.channel.send("An empty query has provided, you should type the song title");
+        if (msg.guild?.music.current && voiceChannel.id !== msg.guild?.music.channel.voice?.id) {
+            return msg.channel.send(`I'am already playing in **${
+                msg.guild?.music.channel.voice!.name}** voice channel`);
+        }
 
         const songs = await msg.guild?.music.search(query);
         if (!songs?.length) return msg.channel.send("Sorry, no results found");
 
+        if (msg.guild?.music.current) {
+            return msg.channel.send({
+                embed: {
+                    color: this.client.config.color,
+                    description: `**[${songs[0].title}](${songs[0].url}) Added to queue**`
+                }
+            });
+        }
+
         msg.guild?.music.add(songs[0], msg.author);
-        if (!msg.guild?.music.channel.voice) await msg.guild?.music.join(msg.member!.voice.channel!, msg.channel as TextChannel);
+        if (!msg.guild?.music.channel.voice) await msg.guild?.music.join(msg.member!.voice.channel!, msg.channel as TextChannel)
+            && msg.member?.guild.me?.voice.setSelfDeaf(true);
         if (!msg.guild?.music.dispatcher) msg.guild?.music.start();
     }
 }
