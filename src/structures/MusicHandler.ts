@@ -78,6 +78,14 @@ export default class MusicHandler {
         this.dispatcher
             ?.on("start", () => {
                 this.current = this.queue.shift()!;
+                void this.channel.text?.send({
+                    embed: {
+                        color: this.client.config.color,
+                        description: `**Now Playing: [${this.current.info.title}](${this.current.info.url}) [${
+                            this.client.util.parseDur(this.current.info.duration!)
+                        }]**`
+                    }
+                });
             })
             .on("finish", () => {
                 this.previous = this.current;
@@ -85,10 +93,28 @@ export default class MusicHandler {
                 if (this.loop) this.queue.push(this.previous!);
                 if (!this.queue.length) {
                     this.channel.voice?.leave();
+                    void this.channel.text?.send({
+                        embed: {
+                            color: this.client.config.color,
+                            description: "**Music queue ended**"
+                        }
+                    });
                     this.reset();
                     return;
                 }
                 this.start();
+            })
+            .on("error", (rusak) => {
+                this.previous = null;
+                this.current = null;
+                this.channel.voice?.leave();
+                void this.channel.text?.send({
+                    embed: {
+                        color: "RED",
+                        description: `**Oh no, \`${rusak.message}\`**`
+                    }
+                });
+                this.reset();
             });
     }
 }
