@@ -18,8 +18,7 @@ export default class PlayCommand extends Command {
         if (!voiceChannel) return msg.channel.send("You need to join voice channel first");
         if (!query) return msg.channel.send("An empty query has provided, you should type the song title");
         if (msg.guild?.music.current && voiceChannel.id !== msg.guild?.music.channel.voice?.id) {
-            return msg.channel.send(`I'am already playing in **${
-                msg.guild?.music.channel.voice!.name}** voice channel`);
+            return msg.channel.send(`I'am already playing in **${msg.guild?.music.channel.voice!.name}** voice channel`);
         }
 
         const result = await msg.guild?.music.search(query);
