@@ -44,7 +44,6 @@ export default class YouTube {
     private extractPlaylist(html: string): Playlist {
         const matched = this.initialDataRegex.exec(html)![2];
         const result = JSON.parse(matched);
-        console.log(result);
         const playlistName = result
             .metadata
             .playlistMetadataRenderer
