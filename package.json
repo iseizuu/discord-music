@@ -8,7 +8,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@allvaa/get-lyrics": "^1.1.2",
+    "@allvaa/get-lyrics": "^1.1.3",
     "@discordjs/opus": "^0.3.3",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
