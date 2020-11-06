@@ -6,7 +6,7 @@ import { readdir } from "fs/promises";
 import { join } from "path";
 import nodeSuperfetch from "node-superfetch";
 import Utility from "../utils/Utility";
-import YouTubeSearch from "../utils/YouTubeSearch";
+import YouTube from "../utils/YouTube";
 import config from "../config.json";
 
 import "../extenders";
@@ -15,7 +15,7 @@ export default class MusicClient extends Client {
     public readonly httpClient = nodeSuperfetch;
     public readonly commands: Collection<string, Command> = new Collection();
     public readonly config: typeof config = config;
-    public readonly youtube: YouTubeSearch = new YouTubeSearch(this);
+    public readonly youtube: YouTube = new YouTube(this);
     public readonly cooldowns: Collection<string, number> = new Collection();
     public readonly util: Utility = new Utility(this);
     public constructor(options?: ClientOptions) {
@@ -61,7 +61,7 @@ declare module "discord.js" {
         httpClient: typeof nodeSuperfetch;
         commands: Collection<string, Command>;
         config: typeof config;
-        youtube: YouTubeSearch;
+        youtube: YouTube;
         cooldowns: Collection<string, number>;
         util: Utility;
         loadCommands(): Promise<void>;

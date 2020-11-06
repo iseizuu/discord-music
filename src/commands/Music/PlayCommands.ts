@@ -1,6 +1,8 @@
 import type { Message, TextChannel } from "discord.js";
 import Command from "../../structures/Command";
 import { CommandConf } from "../../decorators";
+import Playlist from "../../structures/Playlist";
+import type VideoInfo from "../../structures/VideoInfo";
 
 @CommandConf({
     name: "play",
@@ -21,7 +23,11 @@ export default class PlayCommand extends Command {
                 msg.guild?.music.channel.voice!.name}** voice channel`);
         }
 
-        const songs = await msg.guild?.music.search(query);
+        const result = await msg.guild?.music.search(query);
+        let songs: VideoInfo[];
+        if (result instanceof Playlist) songs = result.videos;
+        else songs = result!;
+
         if (!songs?.length) return msg.channel.send("Sorry, no results found");
 
         if (msg.guild?.music.current) {

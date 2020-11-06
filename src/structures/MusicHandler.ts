@@ -2,6 +2,7 @@ import type { Client, Guild, StreamDispatcher, User, TextChannel, VoiceChannel }
 import type VideoInfo from "./VideoInfo";
 import Song from "./Song";
 import ytdl from "ytdl-core";
+import type Playlist from "./Playlist";
 
 export default class MusicHandler {
     public queue: Song[] = []; 
@@ -66,7 +67,7 @@ export default class MusicHandler {
         this.volume = 100;
     }
 
-    public search(query: string): Promise<VideoInfo[]> {
+    public search(query: string): Promise<Playlist|VideoInfo[]> {
         return this.client.youtube.load(query);
     }
 
