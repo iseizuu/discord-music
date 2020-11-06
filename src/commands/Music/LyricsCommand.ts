@@ -18,9 +18,7 @@ export default class LyricCommand extends Command {
         if (!query && msg.guild?.music.current) query = msg.guild?.music.current.info.title
             .replace(/([.+]|\(.+\))/gi, "");
 
-        console.log(query);
         const search = await lyrics(query);
-        console.log(search?.lyrics);
         if (!search?.lyrics.length) return msg.channel.send("No results found");
 
         if (search.lyrics.length < 2000) {
