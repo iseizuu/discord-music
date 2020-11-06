@@ -20,6 +20,6 @@ export default class PauseCommand extends Command {
                 msg.guild?.music.channel.voice!.name}** voice channel`);
         }
         void msg.react("⏸");
-        msg.guild?.music.togglePause();
+        msg.guild?.music.dispatcher?.pause();
     }
 }
