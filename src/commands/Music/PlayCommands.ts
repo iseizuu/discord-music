@@ -31,7 +31,7 @@ export default class PlayCommand extends Command {
         if (!songs?.length) return msg.channel.send("Sorry, no results found");
 
         if (msg.guild?.music.current) {
-            return msg.channel.send({
+            await msg.channel.send({
                 embed: {
                     color: this.client.config.color,
                     description: `**[${songs[0].title}](${songs[0].url}) Added to queue**`
@@ -40,8 +40,10 @@ export default class PlayCommand extends Command {
         }
 
         msg.guild?.music.add(songs[0], msg.author);
-        if (!msg.guild?.music.channel.voice) await msg.guild?.music.join(msg.member!.voice.channel!, msg.channel as TextChannel)
-            && msg.member?.guild.me?.voice.setSelfDeaf(true);
+        if (!msg.guild?.music.channel.voice) {
+            await msg.guild?.music.join(msg.member!.voice.channel!, msg.channel as TextChannel);
+            await msg.member?.guild.me?.voice.setSelfDeaf(true);
+        }
         if (!msg.guild?.music.dispatcher) msg.guild?.music.start();
     }
 }
