@@ -49,6 +49,7 @@ export default class MusicHandler {
     }
 
     public skip(): void {
+        if (this.dispatcher?.paused) this.dispatcher.resume();
         this.dispatcher?.end();
     }
 
@@ -88,34 +89,34 @@ export default class MusicHandler {
                     }
                 });
             })
-            .on("finish", () => {
-                this.previous = this.current;
-                this.current = null;
-                if (this.loop) this.queue.push(this.previous!);
-                if (!this.queue.length) {
-                    this.channel.voice?.leave();
-                    void this.channel.text?.send({
-                        embed: {
-                            color: this.client.config.color,
-                            description: "**Music queue ended**"
-                        }
-                    });
-                    this.reset();
-                    return;
-                }
-                this.start();
-            })
+            .on("finish", this.handleEnd.bind(this))
             .on("error", (rusak) => {
-                this.previous = null;
-                this.current = null;
-                this.channel.voice?.leave();
+                this.handleEnd();
+                if (rusak.message === "write after end") return;
                 void this.channel.text?.send({
                     embed: {
                         color: "RED",
                         description: `**Oh no, \`${rusak.message}\`**`
                     }
                 });
-                this.reset();
             });
+    }
+
+    private handleEnd(): void {
+        this.previous = this.current;
+        this.current = null;
+        if (this.loop) this.queue.push(this.previous!);
+        if (!this.queue.length) {
+            this.channel.voice?.leave();
+            void this.channel.text?.send({
+                embed: {
+                    color: this.client.config.color,
+                    description: "**Music queue ended**"
+                }
+            });
+            this.reset();
+            return;
+        }
+        this.start();
     }
 }
