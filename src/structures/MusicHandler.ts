@@ -27,7 +27,8 @@ export default class MusicHandler {
     public start(): void {
         this.guild.voice?.connection?.play(ytdl(this.queue[0].info.url, {
             filter: "audioonly",
-            quality: "highestaudio"
+            quality: "highestaudio",
+            highWaterMark: 1 << 25
         }));
         this.listen();
     }
