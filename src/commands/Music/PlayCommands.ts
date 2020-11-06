@@ -30,7 +30,7 @@ export default class PlayCommand extends Command {
             await msg.channel.send({
                 embed: {
                     color: this.client.config.color,
-                    description: `**\`${songs.length}\`songs added to queue**`
+                    description: `**\`${songs.length}\` songs added to queue**`
                 }
             });
         } else {
