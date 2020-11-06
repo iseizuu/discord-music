@@ -28,7 +28,7 @@ export default class MusicClient extends Client {
     public build(): void {
         void this.loadCommands();
         void this.loadEventListeners();
-        void this.login(process.env.TOKEN1);
+        void this.login(process.env.TOKEN);
     }
 
     public async loadCommands(): Promise<void> {
