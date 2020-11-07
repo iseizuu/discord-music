@@ -61,14 +61,14 @@ export default class YouTube {
             .playlistVideoListRenderer
             .contents;
         const extractedVideos: VideoInfo[] = videos
-            .filter((x: any) => x.playlistVideoRenderer.isPlayable as boolean)
+            .filter((x: any) => x.playlistVideoRenderer?.isPlayable as boolean)
             .map((x: any) => this.extractData(x.playlistVideoRenderer));
         return new Playlist(playlistName, extractedVideos);
     }
 
     private extractData(video: any): VideoInfo {
         const title = video.title.runs[0].text;
-        const author = video.ownerText?.runs[0].text;
+        const author = video.shortBylineText?.runs[0].text;
         const duration = video.lengthText ? this.client.util.durationToMillis(video.lengthText.simpleText) : null;
         return new VideoInfo(video.videoId, title, author, duration);
     }
