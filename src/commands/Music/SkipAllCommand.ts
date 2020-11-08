@@ -3,13 +3,13 @@ import Command from "../../structures/Command";
 import { CommandConf } from "../../decorators";
 
 @CommandConf({
-    name: "skipall",
-    aliases: ["clearqueue", "sall"],
+    name: "stop",
+    aliases: ["skipall", "clearqueue", "sall"],
     description: "Skip all queues",
     usage: "",
     ownerOnly: false
 })
-export default class SkipAllCommand extends Command {
+export default class StopCommand extends Command {
     public async exec(msg: Message): Promise<Message | void> {
         const voiceChannel = msg.member?.voice.channel;
         
