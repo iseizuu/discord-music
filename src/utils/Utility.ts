@@ -16,4 +16,11 @@ export default class Utility {
             seconds.toString().padStart(2, "0")}`;
         return output;
     }
+
+    public progressBar(current: number, total: number, size = 20): string {
+        const percent = current / total * size;
+        const progbar = new Array(size).fill("▬");
+        progbar[Math.round(percent)] = "🔘";
+        return progbar.join("");
+    }
 }
