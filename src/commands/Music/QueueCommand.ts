@@ -12,6 +12,7 @@ import type Song from "../../structures/Song";
     ownerOnly: false
 })
 export default class QueueCommand extends Command {
+    private readonly emojis = ["◀", "⛔", "▶"];
     public async exec(msg: Message): Promise<Message | void> {
         const voiceChannel = msg.member?.voice.channel;
         const guildMusic = msg.guild?.music;
@@ -28,59 +29,63 @@ export default class QueueCommand extends Command {
                 this.client.util.parseDur(x.info.duration!)
             }]\`**`);
 
-        const list = this.arrHandler(queue!, 10);
-        const emoji = ["◀", "▶"];
-        let page = 0;
-        const messages = await msg.channel.send({
+        const chunked = this.client.util.chunk(queue!, 10);
+        const queueMessage = await msg.channel.send({
             embed: {
                 color: this.client.config.color,
-                description: list[page].join("\n"),
+                description: chunked[0].join("\n"),
                 footer: {
-                    text: `Page: ${page + 1}/${list.length}`
+                    text: `Page: 1/${chunked.length}`
                 }
             }
         });
 
-        if (queue!.length < 10) return;
-        for (const length of emoji) {
-            await messages.react(length);
+        if (queue!.length > 10) {
+            for (const emoji of this.emojis) {
+                await queueMessage.react(emoji);
+            }
+            this.awaitReactions(queueMessage, msg.author, chunked);
         }
-        const filter = (reaction: MessageReaction, user: User): boolean => {
-            return reaction.emoji.name === emoji[0] 
-                || reaction.emoji.name === emoji[1] 
-                && user.id === msg.author.id;
-        };
-        const react = messages.createReactionCollector(filter, {
-        });
-
-        react.on("collect", (msgg: MessageReaction) => {
-            const collect = msgg.emoji.name;
-            if (collect === emoji[0]) {
-                page--;
-                void messages.reactions.resolve(emoji[0])!.users.remove(msg.author);
-            }
-            if (collect === emoji[1]) {
-                page++;
-                void messages.reactions.resolve(emoji[1])!.users.remove(msg.author);
-            }
-            page = ((page % list.length) + list.length) % list.length;
-            void messages.edit({
-                embed: {
-                    color: this.client.config.color,
-                    description: list[page].join("\n"),
-                    footer: {
-                        text: `Page: ${page + 1}/${list.length}`
-                    }
-                }
-            });
-        });
     }
 
-    public arrHandler(array: string[], amount: number): any[] {
-        const arr = [];
-        for (let i = 0; i < array.length; i += amount) {
-            arr.push(array.slice(i, i + amount));
-        }
-        return arr;
+    private awaitReactions(msg: Message, author: User, chunked: string[][], page = 0): void {
+        const filter = (reaction: MessageReaction, user: User): boolean => {
+            return this.emojis.includes(reaction.emoji.name) && user.id === author.id;
+        };
+
+        const collector = msg.createReactionCollector(filter, {
+            max: 1,
+            time: 30000
+        });
+
+        collector
+            .on("collect", (reaction: MessageReaction) => {
+                const collect = reaction.emoji.name;
+                if (collect === this.emojis[0]) {
+                    page--;
+                    void reaction.users.remove(author);
+                }
+                if (collect === this.emojis[1]) {
+                    return collector.stop();
+                }
+                if (collect === this.emojis[2]) {
+                    page++;
+                    void reaction.users.remove(author);
+                }
+                page = ((page % chunked.length) + chunked.length) % chunked.length;
+                void msg.edit({
+                    embed: {
+                        color: this.client.config.color,
+                        description: chunked[page].join("\n"),
+                        footer: {
+                            text: `Page: ${page + 1}/${chunked.length}`
+                        }
+                    }
+                });
+                void this.awaitReactions(msg, author, chunked, page);
+            })
+            .on("end", () => {
+                void msg.reactions.removeAll();
+            });
     }
 }
