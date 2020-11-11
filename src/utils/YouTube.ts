@@ -44,10 +44,8 @@ export default class YouTube {
     private extractPlaylist(html: string): Playlist {
         const matched = this.initialDataRegex.exec(html)![2];
         const result = JSON.parse(matched);
-        const playlistName = result
-            .metadata
-            .playlistMetadataRenderer
-            .title;
+        const playlistInfo = result.sidebar.playlistSidebarRenderer.items[0].playlistSidebarPrimaryInfoRenderer;
+        const playlistOwner = result.sidebar.playlistSidebarRenderer.items[1].playlistSidebarSecondaryInfoRenderer.videoOwner.videoOwnerRenderer;
         const videos = result
             .contents
             .twoColumnBrowseResultsRenderer
@@ -63,7 +61,11 @@ export default class YouTube {
         const extractedVideos: VideoInfo[] = videos
             .filter((x: any) => x.playlistVideoRenderer?.isPlayable as boolean)
             .map((x: any) => this.extractData(x.playlistVideoRenderer));
-        return new Playlist(playlistName, extractedVideos);
+        return new Playlist(
+            playlistInfo.navigationEndpoint.watchEndpoint.playlistId,
+            playlistInfo.title.runs[0].text,
+            playlistOwner.title.runs[0].text,
+            extractedVideos);
     }
 
     private extractData(video: any): VideoInfo {
