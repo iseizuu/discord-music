@@ -8,6 +8,7 @@ import Playlist from "../../structures/Playlist";
     aliases: ["p"],
     description: "",
     usage: "play <song title>",
+    cooldown: 5,
     ownerOnly: false
 })
 export default class PlayCommand extends Command {

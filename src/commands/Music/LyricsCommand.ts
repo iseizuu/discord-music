@@ -8,6 +8,7 @@ import  lyrics from "@allvaa/get-lyrics";
     aliases: ["lr", "ly"],
     description: "",
     usage: "",
+    cooldown: 5,
     ownerOnly: false
 })
 export default class LyricCommand extends Command {
