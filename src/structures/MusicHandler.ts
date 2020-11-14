@@ -92,6 +92,7 @@ export default class MusicHandler {
             })
             .on("finish", this.handleEnd.bind(this))
             .on("error", (rusak) => {
+                this.current = this.queue.shift()!;
                 this.handleEnd();
                 if (rusak.message === "write after end") return;
                 void this.channel.text?.send({
