@@ -14,15 +14,8 @@ import type Song from "../../structures/Song";
 export default class QueueCommand extends Command {
     private readonly emojis = ["◀", "⛔", "▶"];
     public async exec(msg: Message): Promise<Message | void> {
-        const voiceChannel = msg.member?.voice.channel;
         const guildMusic = msg.guild?.music;
-
         if (!msg.guild?.music.current) return;
-        if (!voiceChannel) return msg.channel.send("You need to join voice channel first");
-        if (msg.guild?.music.current && voiceChannel.id !== msg.guild?.music.channel.voice?.id) {
-            return msg.channel.send(`I'am sorry, you need to be in **${
-                msg.guild?.music.channel.voice!.name}** voice channel`);
-        }
 
         const queue = guildMusic?.queue
             .map((x: Song, y: number) => `**${y + 1}. [${x.info.title}](${x.info.url}) [${
