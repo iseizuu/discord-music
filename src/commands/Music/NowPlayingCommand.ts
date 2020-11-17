@@ -12,16 +12,13 @@ export default class NowPlayingCommand extends Command {
         await msg.channel.send({
             embed: {
                 color: this.client.config.color,
-                description: `**Now Playing: [${msg.guild?.music.current.info.title}](${msg.guild?.music.current.info.url})**`,
-                fields: [
-                    {
-                        name: "\u200B",
-                        value: `**\`${this.client.util.progressBar(msg.guild.music.dispatcher!.streamTime, msg.guild.music.current.info.duration!)}\` [${
-                            this.client.util.parseDur(msg.guild.music.dispatcher!.streamTime)}/${
-                            this.client.util.parseDur(msg.guild.music.current.info.duration!)
-                        }]**`
-                    }
-                ]
+                description: `**Now Playing: [${
+                    msg.guild?.music.current.info.title}](${
+                    msg.guild?.music.current.info.url})\n\`${
+                    this.client.util.progressBar(msg.guild.music.dispatcher!.streamTime, msg.guild.music.current.info.duration!)}\` [${
+                    this.client.util.parseDur(msg.guild.music.dispatcher!.streamTime)}/${
+                    this.client.util.parseDur(msg.guild.music.current.info.duration!)
+                }]**`
             }
         });
     }
