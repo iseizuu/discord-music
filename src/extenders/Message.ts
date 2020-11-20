@@ -15,7 +15,7 @@ class Message extends Structures.get("Message") {
             apiMessage = APIMessage.create(this.channel, content, options!).resolveData();
             // @ts-expect-error 2339
             if (Array.isArray(apiMessage.data.content)) {
-                return Promise.all(apiMessage.split().map(this.inlineReply.bind(this) as any) as unknown as Message[]);
+                return Promise.all(apiMessage.split().map(x => this.inlineReply(x, options)) as unknown as Message[]);
             }
         }
 
