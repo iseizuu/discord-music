@@ -22,16 +22,25 @@ export default class PingCommand extends Command {
 
         if (command) {
             Object.assign(embed, {
-                author: {
-                    name: `${command.config.name} command`,
+                author : {
+                    name: command.config.name,
                     iconURL: this.client.user?.displayAvatarURL()
                 },
-                description: command.config.description
+                footer : {
+                    text: msg.author.username,
+                    iconURL: msg.author.displayAvatarURL({ dynamic: true})
+                },
+                description: command.config.description,
+                timestamp: Date.now()
             });
 
             embed.fields?.push({
                 name: "Aliases",
-                value: command.config.aliases?.join(", ")
+                value: `\`${command.config.aliases!.join(", ")}\``
+            },
+            {
+                name: "Usage",
+                value: command.config.usage
             },
             {
                 name: "Cooldown",
@@ -41,6 +50,10 @@ export default class PingCommand extends Command {
             embed.author = {
                 name: "Command List",
                 iconURL: this.client.user?.displayAvatarURL()
+            };
+            embed.footer = {
+                text: `Run ${this.client.config.prefix}help <command> for info about a command.`,
+                iconURL: msg.author.displayAvatarURL({ dynamic: true})
             };
 
             const categories = [...new Set(this.client.commands.map(x => x.config.category))];
