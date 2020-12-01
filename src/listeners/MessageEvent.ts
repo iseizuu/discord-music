@@ -4,9 +4,12 @@ import Listener from "../structures/Listener";
 export default class MessageEvent extends Listener {
     public name = "message";
     private readonly prefix = this.client.config.prefix;
-    public async exec(msg: Message): Promise<void> {
+    public async exec(msg: Message): Promise<Message | void> {
         if (!msg.guild) return;
         if (msg.author.bot) return;
+        if (msg.content === `<@!${this.client.user!.id}>` || msg.content === `<@${this.client.user!.id}>`) {
+            return msg.channel.send(`My prefix is: \`${this.client.config.prefix}\``);
+        }
         if (!msg.content.startsWith(this.prefix)) return;
 
         const args = msg.content.slice(this.prefix.length).trim().split(/ +/g);
@@ -26,7 +29,7 @@ export default class MessageEvent extends Listener {
                         return;
                     }
                 }
-                this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
+                this.client.cooldowns.set(`${command.config.name} - ${msg.author.id}`, now);
                 setTimeout(() => this.client.cooldowns.delete(`${command.config.name}-${msg.author.id}`), cooldownAmount);
             }
             try {
