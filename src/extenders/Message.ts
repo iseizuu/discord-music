@@ -3,6 +3,8 @@
 import type { MessageOptions } from "discord.js";
 import { APIMessage, Structures } from "discord.js";
 
+// original code: https://gist.github.com/Allvaa/0320f06ee793dc88e4e209d3ea9f6256
+
 class Message extends Structures.get("Message") {
     public async inlineReply(content: any, options?: any): Promise<any> {
         const mentionRepliedUser = typeof ((options || content) as MessageOptions)?.allowedMentions?.repliedUser === "undefined" ? true : ((options || content) as MessageOptions)?.allowedMentions?.repliedUser;
