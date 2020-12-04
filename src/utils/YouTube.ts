@@ -27,7 +27,7 @@ export default class YouTube {
 
     private extractSearchResults(html: string): VideoInfo[] {
         const matched = this.initialDataRegex.exec(html)![2];
-        const result = JSON.parse(matched);
+        const result = JSON.parse(matched.split(";</script>")[0]);
         const videos = result
             .contents
             .twoColumnSearchResultsRenderer
