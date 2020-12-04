@@ -1,6 +1,6 @@
 # Discord Music BOT
 <img src ="https://badgen.net/badge/rip/english/green"> <img src ="https://badgen.net/badge/spaghetti/code/red">
-
+![GitHub repo size](https://img.shields.io/github/repo-size/VeguiIzumi/discord-music)
 
 Discord music bot written in TypeScript and no youtube key required!
 
