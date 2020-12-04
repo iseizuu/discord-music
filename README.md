@@ -22,4 +22,4 @@ Discord music bot written in TypeScript and no youtube key required!
 
 
 ## Author
-© [VeguiIzumi](https://github.com/veguiizumi) || [Allvaa](https://github.com/allvaa)
+© [VeguiIzumi](https://github.com/veguiizumi) & [Allvaa](https://github.com/allvaa)
