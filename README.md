@@ -1,4 +1,8 @@
 # Discord Music BOT
+<img src ="https://badgen.net/badge/rip/english/green">
+<img src ="https://badgen.net/badge/spaghetti/code/red">
+
+
 Discord music bot written in TypeScript and no youtube key required!
 
 ## Usage
