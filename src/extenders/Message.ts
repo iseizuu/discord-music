@@ -1,15 +1,14 @@
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-var-requires */
-import type { MessageOptions, MessageAdditions, StringResolvable } from "discord.js";
+import type { MessageOptions } from "discord.js";
 import { APIMessage, Structures } from "discord.js";
 
 class Message extends Structures.get("Message") {
-    public async inlineReply(content: StringResolvable | APIMessage, options?: MessageOptions | MessageAdditions): Promise<Message | Message[]> {
-        const mentionRepliedUser = typeof (options || content)?.allowedMentions?.repliedUser === "undefined" ? true : (options || content)?.allowedMentions?.repliedUser;
-        delete (options || content)?.allowedMentions?.repliedUser;
+    public async inlineReply(content: any, options?: any): Promise<any> {
+        const mentionRepliedUser = typeof ((options || content) as MessageOptions)?.allowedMentions?.repliedUser === "undefined" ? true : ((options || content) as MessageOptions)?.allowedMentions?.repliedUser;
+        delete ((options || content) as MessageOptions)?.allowedMentions?.repliedUser;
 
-        const apiMessage = content instanceof APIMessage ? content.resolveData() : APIMessage.create(this.channel, content, options!).resolveData();
+        const apiMessage = content instanceof APIMessage ? content.resolveData() : APIMessage.create(this.channel, content, options).resolveData();
         Object.assign(apiMessage.data, { message_reference: { message_id: this.id } });
     
         // @ts-expect-error 2339
@@ -23,7 +22,11 @@ class Message extends Structures.get("Message") {
 
         // @ts-expect-error 2339
         if (Array.isArray(apiMessage.data.content)) {
-            return Promise.all(apiMessage.split().map(x => this.inlineReply(x)) as unknown as Message[]);
+            return Promise.all(apiMessage.split().map(x => {
+                // @ts-expect-error 2339
+                x.data.allowed_mentions = apiMessage.data.allowed_mentions;
+                return x;
+            }).map(this.inlineReply.bind(this)) as unknown as Message[]);
         }
 
         const { data, files } = await apiMessage.resolveFiles();
@@ -37,10 +40,17 @@ class Message extends Structures.get("Message") {
 
 declare module "discord.js" {
     export interface MessageMentionOptions {
-        repliedUser: boolean;
+        repliedUser?: boolean;
     }
     export interface Message {
-        inlineReply(content: StringResolvable | APIMessage, options?: MessageOptions | MessageAdditions): Promise<Message | Message[]>;
+        inlineReply(
+            content: APIMessageContentResolvable | (MessageOptions & { split?: false }) | MessageAdditions,
+        ): Promise<Message>;
+        inlineReply(options: MessageOptions & { split: true | SplitOptions }): Promise<Message[]>;
+        inlineReply(options: MessageOptions | APIMessage): Promise<Message | Message[]>;
+        inlineReply(content: StringResolvable, options: (MessageOptions & { split?: false }) | MessageAdditions): Promise<Message>;
+        inlineReply(content: StringResolvable, options: MessageOptions & { split: true | SplitOptions }): Promise<Message[]>;
+        inlineReply(content: StringResolvable, options: MessageOptions): Promise<Message | Message[]>;
     }
 }
 
