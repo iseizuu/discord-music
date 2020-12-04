@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "yarn build && node dist",
     "build": "tsc"
   },
   "dependencies": {
