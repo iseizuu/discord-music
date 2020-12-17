@@ -29,7 +29,7 @@ export default class MessageEvent extends Listener {
                         return;
                     }
                 }
-                this.client.cooldowns.set(`${command.config.name} - ${msg.author.id}`, now);
+                this.client.cooldowns.set(`${command.config.name}-${msg.author.id}`, now);
                 setTimeout(() => this.client.cooldowns.delete(`${command.config.name}-${msg.author.id}`), cooldownAmount);
             }
             try {
