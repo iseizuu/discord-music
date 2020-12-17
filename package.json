@@ -14,7 +14,7 @@
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
     "node-superfetch": "^0.1.10",
-    "ytdl-core": "^4.1.6"
+    "ytdl-core": "^4.1.7"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
