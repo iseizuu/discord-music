@@ -2,7 +2,7 @@ import type { ClientOptions } from "discord.js";
 import type Command from "./Command";
 import type Listener from "./Listener";
 import { Collection, Client } from "discord.js";
-import { readdir } from "fs/promises";
+import { promises as fsPromises } from "fs";
 import { join } from "path";
 import nodeSuperfetch from "node-superfetch";
 import Utility from "../utils/Utility";
@@ -11,6 +11,7 @@ import config from "../config.json";
 
 import "../extenders";
 
+const { readdir } = fsPromises;
 export default class MusicClient extends Client {
     public readonly httpClient = nodeSuperfetch;
     public readonly commands: Collection<string, Command> = new Collection();
