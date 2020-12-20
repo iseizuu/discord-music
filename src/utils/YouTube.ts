@@ -1,14 +1,17 @@
 import type { Client } from "discord.js";
 import Playlist from "../structures/Playlist";
 import VideoInfo from "../structures/VideoInfo";
+import ytdl from "ytdl-core";
 
 export default class YouTube {
     private readonly initialDataRegex = /(window\["ytInitialData"]|var ytInitialData)\s*=\s*(.*);/;
-    private readonly playlistURLRegex = /^https?:\/\/(?:www.|)youtube.com\/playlist\?list=(.*)$/;
+    private readonly playlistURLRegex = /^https?:\/\/(?:www\.|)youtube\.com\/playlist\?list=(.*)$/;
+    private readonly videoURLRegex = /^https?:\/\/((?:www\.|)youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(\S+)$/;
     public constructor(public readonly client: Client) {}
 
     public async load(query: string): Promise<Playlist|VideoInfo[]> {
         if (this.playlistURLRegex.test(query)) return this.loadPlaylist(query);
+        else if (this.videoURLRegex.test(query)) return this.loadVideo(query);
         else return this.search(query);
     }
 
@@ -23,6 +26,12 @@ export default class YouTube {
         const { text } = await this.client.httpClient
             .get(url);
         return this.extractPlaylist(text);
+    }
+
+    public async loadVideo(url: string): Promise<VideoInfo[]> {
+        const { videoDetails: { title, videoId, author: { name: authorName }, lengthSeconds } } = await ytdl.getBasicInfo(url);
+        const durationMs = parseInt(lengthSeconds) * 1000;
+        return [new VideoInfo(videoId, title, authorName, durationMs)];
     }
 
     private extractSearchResults(html: string): VideoInfo[] {
