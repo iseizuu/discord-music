@@ -4,7 +4,7 @@ import VideoInfo from "../structures/VideoInfo";
 import ytdl from "ytdl-core";
 
 export default class YouTube {
-    private readonly initialDataRegex = /(window\["ytInitialData"]|var ytInitialData)\s*=\s*(.*);/;
+    private readonly initialDataRegex = /(window\["ytInitialData"]|var ytInitialData)\s*=\s*(.*);<\/script>/;
     private readonly playlistURLRegex = /^https?:\/\/(?:www\.|)youtube\.com\/playlist\?list=(.*)$/;
     private readonly videoURLRegex = /^https?:\/\/((?:www\.|)youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(\S+)$/;
     public constructor(public readonly client: Client) {}
@@ -36,7 +36,7 @@ export default class YouTube {
 
     private extractSearchResults(html: string): VideoInfo[] {
         const matched = this.initialDataRegex.exec(html)![2];
-        const result = JSON.parse(matched.split(";</script>")[0]);
+        const result = JSON.parse(matched);
         const videos = result
             .contents
             .twoColumnSearchResultsRenderer
@@ -52,7 +52,7 @@ export default class YouTube {
 
     private extractPlaylist(html: string): Playlist {
         const matched = this.initialDataRegex.exec(html)![2];
-        const result = JSON.parse(matched.split(";</script>")[0]);
+        const result = JSON.parse(matched);
         const playlistInfo = result.sidebar.playlistSidebarRenderer.items[0].playlistSidebarPrimaryInfoRenderer;
         const playlistOwner = result.sidebar.playlistSidebarRenderer.items[1].playlistSidebarSecondaryInfoRenderer.videoOwner.videoOwnerRenderer;
         const videos = result
