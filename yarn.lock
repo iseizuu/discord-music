@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@allvaa/get-lyrics@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@allvaa/get-lyrics/-/get-lyrics-1.1.3.tgz#17f5917c9a8bc36a50f8dfce1904073a91622c00"
-  integrity sha512-OaGsA9TgqetzRe9mFpmdkGRY7uKYesDSXyfZI+Mh3vndABEyDIxCXY735Gij4A7Pd/tu9nbidXiJDzZJFTHD7A==
+"@allvaa/get-lyrics@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@allvaa/get-lyrics/-/get-lyrics-1.1.4.tgz#ddd9cc40a866bad99a61257c707961200be9ca8b"
+  integrity sha512-lNMSCfWKvW9qfxyoiWJnvpOPHjTzDwkDkGbfhdDBKeZFtuoho4E3BfwDBoFDuJ8YftvirF99S8JYNA7NGBX4HQ==
   dependencies:
     cheerio "^1.0.0-rc.3"
     node-fetch "^2.6.1"
